@@ -1,0 +1,22 @@
+#!name=Microsoft Public Firewall
+#!desc=Allow Microsoft login/auth, documentation, and public services (no cloud services).
+#!system=ios
+#!author=Codex
+
+[Rule]
+DOMAIN,www.microsoft.com,DIRECT
+DOMAIN,account.microsoft.com,DIRECT
+DOMAIN,login.microsoftonline.com,DIRECT
+DOMAIN-SUFFIX,microsoftonline.com,DIRECT
+DOMAIN,login.live.com,DIRECT
+DOMAIN-SUFFIX,live.com,DIRECT
+DOMAIN-SUFFIX,outlook.com,DIRECT
+DOMAIN-SUFFIX,office.com,DIRECT
+DOMAIN-SUFFIX,microsoftstore.com,DIRECT
+DOMAIN-SUFFIX,msauth.net,DIRECT
+DOMAIN-SUFFIX,msauthimages.net,DIRECT
+DOMAIN-SUFFIX,msftauth.net,DIRECT
+DOMAIN-SUFFIX,msftauthimages.net,DIRECT
+DOMAIN,docs.microsoft.com,DIRECT
+DOMAIN,learn.microsoft.com,DIRECT
+DOMAIN,support.microsoft.com,DIRECT
