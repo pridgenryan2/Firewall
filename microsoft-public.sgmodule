@@ -41,4 +41,7 @@ DOMAIN,officecdn.microsoft.com,DIRECT
 DOMAIN-SUFFIX,azure.com,DIRECT
 DOMAIN,portal.azure.com,DIRECT
 DOMAIN,reactblade.portal.azure.net,DIRECT
+DOMAIN-SUFFIX,cdn.office.net,DIRECT
+DOMAIN,graph.windows.net,DIRECT
+DOMAIN,hosting.portal.azure.net,DIRECT
 DOMAIN,management.azure.com,DIRECT
