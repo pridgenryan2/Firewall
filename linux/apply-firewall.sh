@@ -30,8 +30,8 @@ DOMAINS=(
 )
 
 SUFFIXES=(
-  "aaplimg.com"
   "aadcdn.microsoftonline-p.com"
+  "aaplimg.com"
   "apple-cloudkit.com"
   "apple-dns.net"
   "apple-mapkit.com"
@@ -45,6 +45,7 @@ SUFFIXES=(
   "bing.net"
   "cdn-apple.com"
   "cdn.office.net"
+  "enterpriseregistration.windows.net"
   "icloud-content.com"
   "icloud.com"
   "itunes.com"
