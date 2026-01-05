@@ -40,4 +40,5 @@ DOMAIN,download.windowsupdate.com,DIRECT
 DOMAIN,officecdn.microsoft.com,DIRECT
 DOMAIN-SUFFIX,azure.com,DIRECT
 DOMAIN,portal.azure.com,DIRECT
+DOMAIN,reactblade.portal.azure.net,DIRECT
 DOMAIN,management.azure.com,DIRECT
