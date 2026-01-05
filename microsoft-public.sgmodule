@@ -8,6 +8,7 @@ DOMAIN,account.microsoft.com,DIRECT
 DOMAIN,login.microsoftonline.com,DIRECT
 DOMAIN,login.microsoft.com,DIRECT
 DOMAIN,login.windows.net,DIRECT
+DOMAIN,device.login.microsoftonline.com,DIRECT
 DOMAIN,login.live.com,DIRECT
 DOMAIN-SUFFIX,microsoftonline.com,DIRECT
 DOMAIN-SUFFIX,msauth.net,DIRECT
@@ -31,6 +32,10 @@ DOMAIN-SUFFIX,msn.com,DIRECT
 DOMAIN-SUFFIX,surface.com,DIRECT
 DOMAIN,docs.microsoft.com,DIRECT
 DOMAIN,learn.microsoft.com,DIRECT
+DOMAIN,manage.microsoft.com,DIRECT
+DOMAIN,portal.manage.microsoft.com,DIRECT
+DOMAIN,enrollment.manage.microsoft.com,DIRECT
+DOMAIN,enterpriseenrollment.manage.microsoft.com,DIRECT
 DOMAIN-SUFFIX,enterpriseregistration.windows.net,DIRECT
 DOMAIN,support.microsoft.com,DIRECT
 DOMAIN-SUFFIX,windowsupdate.com,DIRECT
@@ -44,5 +49,6 @@ DOMAIN,portal.azure.com,DIRECT
 DOMAIN,reactblade.portal.azure.net,DIRECT
 DOMAIN-SUFFIX,cdn.office.net,DIRECT
 DOMAIN,graph.windows.net,DIRECT
+DOMAIN,graph.microsoft.com,DIRECT
 DOMAIN,hosting.portal.azure.net,DIRECT
 DOMAIN,management.azure.com,DIRECT
