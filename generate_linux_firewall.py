@@ -42,7 +42,7 @@ def collect_rules(files: Iterable[pathlib.Path]) -> Tuple[List[str], List[str]]:
     return sorted(domains), sorted(suffixes)
 
 
-def render_script(domains: List[str], suffixes: List[str]) -> str:
+def render_linux_script(domains: List[str], suffixes: List[str]) -> str:
     domain_lines = "\n".join(f"  \"{d}\"" for d in domains)
     suffix_lines = "\n".join(f"  \"{s}\"" for s in suffixes)
     return f"""#!/usr/bin/env bash
@@ -147,9 +147,77 @@ echo "Linux firewall rules applied (mode: $MODE)."
 """
 
 
+def build_fqdns(domains: List[str], suffixes: List[str]) -> List[str]:
+    fqdns: Set[str] = set(domains)
+    for suffix in suffixes:
+        fqdns.add(suffix)
+        fqdns.add(f"*.{suffix}")
+    return sorted(fqdns)
+
+
+def render_windows_script(domains: List[str], suffixes: List[str], expected_major: int) -> str:
+    fqdns = build_fqdns(domains, suffixes)
+    fqdn_lines = "\n".join(f"    \"{fqdn}\"" for fqdn in fqdns)
+    return f"""#requires -version {expected_major}.0
+[CmdletBinding()]
+param(
+    [ValidateSet('Enforce', 'Allow')]
+    [string]$Mode = 'Enforce'
+)
+
+$expectedMajor = {expected_major}
+if ($PSVersionTable.PSVersion.Major -ne $expectedMajor) {{
+    Write-Error "This script requires PowerShell {expected_major}.x."
+    exit 1
+}}
+
+$ErrorActionPreference = 'Stop'
+
+Import-Module NetSecurity -ErrorAction Stop
+
+$isAdmin = ([Security.Principal.WindowsPrincipal] `
+    [Security.Principal.WindowsIdentity]::GetCurrent() `
+).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+if (-not $isAdmin) {{
+    Write-Error "Run this script as Administrator."
+    exit 1
+}}
+
+$group = 'SurgeFirewall'
+$rulePrefix = 'SurgeAllow'
+$fqdns = @(
+{fqdn_lines}
+)
+
+Get-NetFirewallRule -Group $group -ErrorAction SilentlyContinue | Remove-NetFirewallRule
+
+New-NetFirewallRule -DisplayName "$rulePrefix-DNS-UDP" -Group $group `
+    -Direction Outbound -Action Allow -Protocol UDP -RemotePort 53 | Out-Null
+New-NetFirewallRule -DisplayName "$rulePrefix-DNS-TCP" -Group $group `
+    -Direction Outbound -Action Allow -Protocol TCP -RemotePort 53 | Out-Null
+
+$chunkSize = 50
+for ($i = 0; $i -lt $fqdns.Count; $i += $chunkSize) {{
+    $end = [Math]::Min($i + $chunkSize - 1, $fqdns.Count - 1)
+    $chunk = $fqdns[$i..$end]
+    New-NetFirewallRule -DisplayName "$rulePrefix-FQDN-$i" -Group $group `
+        -Direction Outbound -Action Allow -RemoteFqdn $chunk | Out-Null
+}}
+
+if ($Mode -eq 'Enforce') {{
+    Set-NetFirewallProfile -Profile Domain,Public,Private -DefaultOutboundAction Block | Out-Null
+}} else {{
+    Set-NetFirewallProfile -Profile Domain,Public,Private -DefaultOutboundAction Allow | Out-Null
+}}
+
+Write-Host "Windows firewall rules applied (mode: $Mode)."
+"""
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Generate Linux iptables/ipset script from Surge v5 modules."
+        description="Generate Linux and Windows firewall scripts from Surge v5 modules."
     )
     parser.add_argument(
         "--ios-dir",
@@ -160,6 +228,11 @@ def main() -> int:
         "--output",
         default="linux/apply-firewall.sh",
         help="Output shell script path (default: linux/apply-firewall.sh)",
+    )
+    parser.add_argument(
+        "--windows-dir",
+        default="windows",
+        help="Directory for generated PowerShell scripts (default: windows)",
     )
     args = parser.parse_args()
 
@@ -174,8 +247,27 @@ def main() -> int:
     domains, suffixes = collect_rules(files)
     output_path = pathlib.Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(render_script(domains, suffixes), encoding="utf-8", newline="\n")
+    output_path.write_text(
+        render_linux_script(domains, suffixes), encoding="utf-8", newline="\n"
+    )
     print(f"Wrote {output_path}")
+
+    windows_dir = pathlib.Path(args.windows_dir)
+    windows_dir.mkdir(parents=True, exist_ok=True)
+    ps6_path = windows_dir / "apply-firewall-ps6.ps1"
+    ps7_path = windows_dir / "apply-firewall-ps7.ps1"
+    ps6_path.write_text(
+        render_windows_script(domains, suffixes, expected_major=6),
+        encoding="utf-8",
+        newline="\n",
+    )
+    ps7_path.write_text(
+        render_windows_script(domains, suffixes, expected_major=7),
+        encoding="utf-8",
+        newline="\n",
+    )
+    print(f"Wrote {ps6_path}")
+    print(f"Wrote {ps7_path}")
     return 0
 
 
