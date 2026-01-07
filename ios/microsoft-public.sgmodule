@@ -55,3 +55,4 @@ DOMAIN,graph.windows.net,subnet-microsoft
 DOMAIN,graph.microsoft.com,subnet-microsoft
 DOMAIN,hosting.portal.azure.net,subnet-microsoft
 DOMAIN,management.azure.com,subnet-microsoft
+DOMAIN-SUFFIX,servicebus.windows.net,subnet-microsoft
