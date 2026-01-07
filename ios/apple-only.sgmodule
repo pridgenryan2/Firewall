@@ -3,20 +3,23 @@
 #!system=ios
 #!author=Codex
 
+[Proxy Group]
+subnet-apple = subnet, default = DIRECT, hidden = true
+
 [Rule]
-DOMAIN-SUFFIX,apple.com,DIRECT
-DOMAIN-SUFFIX,apple.com.cn,DIRECT
-DOMAIN-SUFFIX,icloud.com,DIRECT
-DOMAIN-SUFFIX,icloud-content.com,DIRECT
-DOMAIN-SUFFIX,me.com,DIRECT
-DOMAIN-SUFFIX,mac.com,DIRECT
-DOMAIN-SUFFIX,itunes.com,DIRECT
-DOMAIN-SUFFIX,applemusic.com,DIRECT
-DOMAIN-SUFFIX,mzstatic.com,DIRECT
-DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT
-DOMAIN-SUFFIX,apple-dns.net,DIRECT
-DOMAIN-SUFFIX,apple-mapkit.com,DIRECT
-DOMAIN-SUFFIX,aaplimg.com,DIRECT
-DOMAIN-SUFFIX,cdn-apple.com,DIRECT
-DOMAIN-SUFFIX,apple.news,DIRECT
-DOMAIN-SUFFIX,appstore.com,DIRECT
+DOMAIN-SUFFIX,apple.com,subnet-apple
+DOMAIN-SUFFIX,apple.com.cn,subnet-apple
+DOMAIN-SUFFIX,icloud.com,subnet-apple
+DOMAIN-SUFFIX,icloud-content.com,subnet-apple
+DOMAIN-SUFFIX,me.com,subnet-apple
+DOMAIN-SUFFIX,mac.com,subnet-apple
+DOMAIN-SUFFIX,itunes.com,subnet-apple
+DOMAIN-SUFFIX,applemusic.com,subnet-apple
+DOMAIN-SUFFIX,mzstatic.com,subnet-apple
+DOMAIN-SUFFIX,apple-cloudkit.com,subnet-apple
+DOMAIN-SUFFIX,apple-dns.net,subnet-apple
+DOMAIN-SUFFIX,apple-mapkit.com,subnet-apple
+DOMAIN-SUFFIX,aaplimg.com,subnet-apple
+DOMAIN-SUFFIX,cdn-apple.com,subnet-apple
+DOMAIN-SUFFIX,apple.news,subnet-apple
+DOMAIN-SUFFIX,appstore.com,subnet-apple
